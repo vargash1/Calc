@@ -1,0 +1,182 @@
+#!/usr/bin/env ruby
+# @Author: vargash1
+# @Name:   Vargas, Hector
+# @Email:  vargash1@wit.edu
+# @Date:   2015-07-03 00:17:45
+# @Last Modified by:   vargash1
+# @Last Modified time: 2015-07-06 00:45:49
+require 'colorize'
+require 'io/console'
+class Calc
+    def initialize()
+        @x = nil; @y = nil
+        @ans = nil
+        @operation = nil
+        @no_color = false
+        @radixes = false
+        @ops = ['MUL','ADD','DIV','POW','SQRT','CURT','NRT','SUB','PRCT']
+    end
+    def parse_args()
+        ARGV.each do |a|
+            case 
+            when (a == a[/[a-zA-Z]*/])
+                @ops.each do |elem|
+                    if (a.upcase == elem)
+                        @operation = elem
+                    end
+                end
+            when (is_number(a.to_f))
+                if (@x == nil) ? @x = a.to_f: @y = a.to_f
+                end
+            end
+        end
+    end
+    def parse_flags()
+        if ARGV.length == 0
+            usage()
+            exit
+        end    
+        flags = ARGV[0]
+        flags.split("").each do |f|
+            @no_color = true if f.upcase == 'n'
+            @radixes = true if f.upcase == 'r'
+        end
+    end
+    def execute_operation()
+        chck_error()
+        case
+        when (@operation == 'MUL')
+            @ans = @x * @y 
+        when (@operation == 'ADD')
+            @ans = @x + @y
+        when (@operation == 'DIV')
+            @ans = @x / @y
+        when (@operation == 'SUB')
+            @ans = @x - @y
+        when (@operation == 'POW')
+            @ans = @x ** @y
+        when (@operation == 'SQRT')
+            @ans = @x ** (1.0/2.0)
+        when (@operation == 'CURT')
+            @ans = @x ** (1.0/3.0)
+        when (@operation == 'NRT')
+            @ans = @x ** (1.0/@y)
+        when (@operation == 'PRCT')
+            @ans = @x * 100.0
+        end
+        print_result()
+    end
+    def get_char()
+        STDOUT.flush
+        user_in = STDIN.getch
+        return user_in
+    end
+    def print_result()
+        puts "Executing operation: #{@operation}".yellow
+        case
+        when (@radix)
+            puts "X"
+            print_all_radixes(@x)
+            puts "Y" if (@y != nil)
+            print_all_radixes(@y) if (@y != nil)
+            interactive()
+        else
+            puts "\t---------------------------------------".green
+            print "X:\t\t".yellow; print "#{@x}\n" 
+            if (@y != nil)       
+                print "Y:\t\t".yellow; print "#{@y}\n"
+            end
+            print "Solution:\t".yellow; print "#{@ans}\n"        
+            interactive()
+        end
+    end
+    def print_all_radixes(num)
+        String.disable_colorization = true if (@no_color)
+        puts "\t---------------------------------------".green
+        print "Base 10:\t".yellow; print "#{num.to_s(10)}\n"
+        print "Base 16:\t".yellow; print "#{num.to_s(16)}\n"
+        print "Base 8: \t".yellow; print "#{num.to_s(8)}\n"
+        print "Base 2:\n".yellow
+        print_nice_binary(num)
+    end
+    def print_nice_binary(num)
+        if num <= (2**31)
+            puts "\t32 Bit Format".yellow
+            print "\t"
+            31.downto(0) do |n| 
+                print num[n]
+                print " " if (n%4 == 0)
+            end
+        end
+        if num <= (2**63)
+            puts "\n\t64 Bit Format".yellow
+            print "\t"
+            63.downto(0) do |n|
+                print num[n]
+                print " " if (n%4 == 0)
+            end
+        else
+            puts "\n\t128 Bit Format".yellow
+            print "\t"
+            127.downto(0) do |n|
+                print"\n\t" if (n == 63)
+                print num[n]
+                print " " if (n%4 == 0) 
+            end
+        end
+        puts
+    end
+    def usage()
+        puts """
+        Either of the following are valid.
+        calc [FLAGS] [NUM] [OPERATION] [NUM]
+        calc [FLAGS] [NUM] [OPERATION]    
+
+        """
+    end
+    def interactive()
+        puts "Answer was stored and it is possible to further operate using this data"
+        puts "Enter (y/Y) if you wish to continue..."
+        puts "Enter (q/Q) if you wish to quit..."
+        tmp = get_char()
+        exit if (tmp.upcase == 'Q')
+        get_operation() if (tmp.upcase == 'Y')
+
+    end
+    def get_operation()
+        @x = @ans
+        puts "Enter the operation to execute, case sensitivity does not matter"
+        puts "All Operations:"
+        print "\t"
+        @arr.each do |a|
+            print a, " "
+        end
+        puts
+        STDOUT.flush
+        new_op = STDIN.gets.chomp
+        #save new op 
+        @operation = new_op if new_op != ""
+        abort("[ERROR]Expected an operation") if new_op == ""
+    end
+    def get_new_num()
+        #see if new number is required
+        puts "Enter another number for binary operations\nJust Hit enter if you wish to execute a unary operation!"
+        STDOUT.flush
+        new_num = STDIN.gets.chomp
+        @y = new_num.to_f if is_number(new_num)
+        @y = nil if new_num == ""
+        execute_operation()
+    end
+    def is_number(num)
+        is_num = ((num.to_f.to_s == num.to_s) || (num.to_i.to_s == num.to_s))
+        return is_num
+    end
+end
+def main()
+    runtime = Calc.new()
+    runtime.parse_flags()
+    runtime.parse_args()
+
+
+end
+main()
