@@ -29,4 +29,5 @@ This is a simple cli calculator that arose from my development of the cli bitwis
 	gem install calc
 
 ```
-###Flags
+###Sample Runs
+Coming soon!...
