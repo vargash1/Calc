@@ -3,31 +3,59 @@ This is a simple cli calculator that arose from my development of the cli bitwis
 
 ###Usage
 ```bash
-	#either are acceptable as it depends on your operation
-	calc [FLAGS] [NUMERIC] [OPERATION] [NUMERIC]
-	calc [FLAGS] [NUMERIC] [OPERATION] 
-```
-###Flags
-* n will disable colorized output
-* r will enable output of different radixes
+    #either are acceptable as it depends on your operation
+    Usage
+        calc [FLAGS] [NUM] [OPERATION] [NUM]
+        calc [FLAGS] [NUM] [OPERATION]
+    Flags
 
-###Operations
-* Addition 
-* Subtraction
-* Multiplication
-* Division
-* Sqaure Root
-* Cube Root
-* Nth Root
-* Percent Of
-* Power to
-* Modulus
+        -n
+            disables colorized output(enabled by default)
+        -r
+            outputs result in base 2,8,16 (default output is base 10 only) 
+        -h
+            displays usage and exits
+    Operations
+        add
+            returns num + num 
+        sub
+            returns num - num
+        mul
+            returns num * num
+        div
+            returns num / num
+        pow
+            returns num ^ num
+        sqrt
+            returns num ^ (1/2)
+        curt
+            returns num ^ (1/3)
+        nrt
+            returns num ^ (1/num)
+        prct
+            returns (num/num) * 100 
+        mod
+            returns num modulo num
+```
 
 ###Installation
 ```bash
-	#you may need to use sudo
-	gem install calc
+    #you may need to use sudo
+    gem install calc
 
 ```
+
+###Operations
+* Addition         (add) 
+* Subtraction      (sub)
+* Multiplication   (mul)
+* Division         (div)
+* Sqaure Root      (sqrt)
+* Cube Root        (curt)
+* Nth Root         (nrt)
+* Percent Of       (prct)
+* Power to         (pow)
+* Modulus          (mod)
+
 ###Sample Runs
 Coming soon!...
